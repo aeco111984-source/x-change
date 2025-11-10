@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Dynamic title/description will be overwritten by script for corridor pairs -->
+  <title>Currency Converter — Transparent, All-In Rates</title>
+  <meta name="description" content="Convert EUR to USD with interbank and provider rates. See the true all-in amount and compare providers. Share or embed any result." />
+
+  <link rel="preconnect" href="https://example-rate-provider.test" />
+  <link rel="stylesheet" href="styles.css" />
+  <meta name="theme-color" content="#0a3d91" />
+
+  <!-- Canonical (updated by JS for corridor paths) -->
+  <link id="canonical" rel="canonical" href="/" />
+
+  <!-- JSON-LD gets injected by JS with live pair -->
+  <script id="ldjson" type="application/ld+json">{}</script>
+</head>
+<body>
+  <header class="site-header" id="site-header">
+    <div class="brand">🌐 Prime Exchange</div>
+    <p class="strap">Transparent consumer currency exchange — no hype, just the truth</p>
+  </header>
+
+  <main class="container">
+    <!-- XE-grade Converter -->
+    <section class="card converter" aria-labelledby="title">
+      <h1 id="title" class="page-title">EUR to USD — Convert Euros to US Dollars</h1>
+
+      <!-- Dominant Output -->
+      <h2 id="headline" class="headline" aria-live="polite">100 EUR = — USD</h2>
+
+      <!-- Inputs -->
+      <div class="grid grid-2 gap">
+        <div class="field">
+          <label for="amount">Amount</label>
+          <input id="amount" type="number" inputmode="decimal" value="100" min="0" step="0.01" />
+        </div>
+        <div class="field">
+          <label class="mini">From</label>
+          <select id="from" aria-label="From currency">
+            <option value="EUR" selected>🇪🇺 EUR — Euro</option>
+            <option value="USD">🇺🇸 USD — US Dollar</option>
+            <option value="GBP">🇬🇧 GBP — British Pound</option>
+            <option value="JPY">🇯🇵 JPY — Japanese Yen</option>
+            <option value="CAD">🇨🇦 CAD — Canadian Dollar</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="mini">To</label>
+          <select id="to" aria-label="To currency">
+            <option value="USD" selected>🇺🇸 USD — US Dollar</option>
+            <option value="EUR">🇪🇺 EUR — Euro</option>
+            <option value="GBP">🇬🇧 GBP — British Pound</option>
+            <option value="JPY">🇯🇵 JPY — Japanese Yen</option>
+            <option value="CAD">🇨🇦 CAD — Canadian Dollar</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="mini">&nbsp;</label>
+          <button id="swap" class="btn-secondary" aria-label="Swap currencies">⇄ Swap</button>
+        </div>
+      </div>
+
+      <div class="grid grid-2 gap">
+        <button id="convert" class="btn-primary">Convert</button>
+        <div class="share-row">
+          <button id="copyLink" class="btn-ghost">Copy Link</button>
+          <button id="copyEmbed" class="btn-ghost">Copy Embed</button>
+        </div>
+      </div>
+
+      <!-- Reciprocal lines + trust surface -->
+      <div class="results">
+        <p id="lineA" class="subrate">1 EUR = — USD</p>
+        <p id="lineB" class="subrate">1 USD = — EUR</p>
+
+        <div class="trust grid grid-3">
+          <div class="chip">Interbank: <strong id="interbank">—</strong></div>
+          <div class="chip">Broker: <strong id="broker">—</strong></div>
+          <div class="chip">Spread: <strong id="spread">—</strong></div>
+        </div>
+
+        <p class="timestamp">
+          <span class="badge" id="rateType">Rate type: Interbank (mid)</span> •
+          Updated <span id="time">—:—:—</span> GMT •
+          Source: Prime Interbank (mock)
+        </p>
+      </div>
+
+      <!-- Alerts placeholder -->
+      <div class="alerts card-lite">
+        <h3 class="h3-quiet">Get a rate alert</h3>
+        <div class="grid grid-3 gap">
+          <input id="alertEmail" type="email" placeholder="your@email.com" />
+          <input id="alertThreshold" type="number" inputmode="decimal" step="0.0001" placeholder="Alert when EUR→USD ≥" />
+          <button id="saveAlert" class="btn-secondary">Save Alert</button>
+        </div>
+        <p class="note" id="alertNote">Alerts are stored locally for now. Connect backend later.</p>
+      </div>
+    </section>
+
+    <!-- Effective All-In Comparison -->
+    <section class="card providers" aria-labelledby="compare-title" id="providersCard">
+      <h3 id="compare-title">Compare Money Transfer Providers</h3>
+      <p class="note">Ranked by <strong>amount received</strong> after fees for this corridor.</p>
+
+      <div class="table" role="table" aria-label="Provider comparison">
+        <div class="row header" role="row">
+          <span role="columnheader">Provider</span>
+          <span role="columnheader">Rate</span>
+          <span role="columnheader">Fee</span>
+          <span role="columnheader">Total Received</span>
+          <span role="columnheader">ETA</span>
+        </div>
+        <div id="wise" class="row" role="row"><span>Wise</span><span>—</span><span>—</span><span>—</span><span>—</span></div>
+        <div id="revolut" class="row" role="row"><span>Revolut</span><span>—</span><span>—</span><span>—</span><span>—</span></div>
+        <div id="western" class="row" role="row"><span>Western Union</span><span>—</span><span>—</span><span>—</span><span>—</span></div>
+        <div id="moneygram" class="row" role="row"><span>MoneyGram</span><span>—</span><span>—</span><span>—</span><span>—</span></div>
+        <div id="remitly" class="row" role="row"><span>Remitly</span><span>—</span><span>—</span><span>—</span><span>—</span></div>
+        <div id="xoom" class="row" role="row"><span>Xoom (PayPal)</span><span>—</span><span>—</span><span>—</span><span>—</span></div>
+        <div id="ofx" class="row" role="row"><span>OFX</span><span>—</span><span>—</span><span>—</span><span>—</span></div>
+        <div id="worldremit" class="row" role="row"><span>WorldRemit</span><span>—</span><span>—</span><span>—</span><span>—</span></div>
+      </div>
+
+      <p class="note">“Total received” = amount × provider rate − fee. Best is highlighted automatically.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="site-footer">
+    © 2025 Prime Exchange • Built for clarity, speed, and transparency
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
